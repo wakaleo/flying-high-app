@@ -190,13 +190,49 @@ module.exports = function (grunt) {
       },
       during_watch: {
         browsers: ['PhantomJS']
+      }
+    },
+    ngconstant: {
+      options: {
+        name: 'config',
+        space: '  '
       },
+      development: {
+        options: {
+          dest: 'config/config.js'
+        },
+        constants: {
+          FLIGHTS_WEB_SERVICE_URL: 'http://localhost:8090'
+        }
+      },
+      staging: {
+        options: {
+          dest: 'config/config.js'
+        },
+        constants: {
+          FLIGHTS_WEB_SERVICE_URL: 'http://dev-flights.cfapps.io'
+        }
+      },
+      production: {
+        options: {
+          dest: 'config/config.js'
+        },
+        constants: {
+          FLIGHTS_WEB_SERVICE_URL: 'http://prod-flights.cfapps.io'
+        }
+      }
     }
   });
 
+  grunt.loadNpmTasks('grunt-ng-constant');
+
+  grunt.registerTask('development',['ngconstant:development']);
+  grunt.registerTask('staging',['ngconstant:staging']);
+  grunt.registerTask('production',['ngconstant:production']);
+
   grunt.registerTask('build',['jshint','clean:before','less','dom_munger','ngtemplates','cssmin','concat','ngmin','uglify','copy','htmlmin','imagemin','clean:after']);
-  grunt.registerTask('serve', ['dom_munger:read','jshint','connect', 'watch']);
-  grunt.registerTask('test',['dom_munger:read','karma:all_tests']);
+  grunt.registerTask('serve', ['dom_munger:read','jshint','ngconstant:development','connect', 'watch']);
+  grunt.registerTask('test',['dom_munger:read','ngconstant:development','karma:all_tests']);
 
   grunt.event.on('watch', function(action, filepath) {
     //https://github.com/gruntjs/grunt-contrib-watch/issues/156
@@ -235,3 +271,4 @@ module.exports = function (grunt) {
 
   });
 };
+

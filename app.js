@@ -1,7 +1,9 @@
-angular.module('flyingHighApp', ['ui.bootstrap','ui.utils','ngRoute','ngAnimate']);
+angular.module('flyingHighApp', ['ui.bootstrap', 'ui.utils', 'ngRoute', 'ngResource', 'ngAnimate', 'myaccount','config']);
 
 angular.module('flyingHighApp').config(function($routeProvider) {
 
+    $routeProvider.when('/myaccount',{templateUrl: 'partial/myaccount/myaccount.html'});
+    $routeProvider.when('/home',{templateUrl: 'partial/home/home.html'});
     /* Add New Routes Above */
     $routeProvider.otherwise({redirectTo:'/home'});
 
